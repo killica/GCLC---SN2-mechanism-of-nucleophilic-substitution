@@ -1,7 +1,7 @@
 number pi 3.14159
 dim 300 300
 ang3d_picture -500 -500 500 500
-ang3d_origin 100 50 2 0.7
+ang3d_origin 100 50 pi 0.7
 ang3d_unit 2
 
 ang3d_axes_drawing_range -50 50 -50 50 -50 50
@@ -21,21 +21,24 @@ color 0 0 0
 fontsize 40
 ang3d_point C 20 20 20
 printat C {C}
+fontsize 20
 
 % --------------
-% Leaving group
+% Leaving group animation
 % --------------
 
+procedure draw_leaving_group {x} {
+linethickness 0.16
 color 137 207 240
 ang3d_draw_parametric_surface u v
 {0; u <= 6.28; u + 0.1}
 {-1.57; v <= 1.57; v + 0.06}
-{45 + 5*cos(v)*cos(u); 20 + 5*cos(v)*sin(u); 20 + 5*sin(v)}
+{x + 5*cos(v)*cos(u); 20 + 5*cos(v)*sin(u); 20 + 5*sin(v)}
 
 color 0 0 0
-fontsize 20
-ang3d_point LG 45 20 20
+ang3d_point LG x 20 20
 printat LG {LG}
+}
 
 % --------------
 % Nucleophile animation
@@ -59,6 +62,15 @@ color 218 165 32
 ang3d_draw_parametric_surface u v
 {0; u <= 6.28; u + 0.3} 
 {0; v <= 10; v + 0.3} 
+{ v; 20 + 1*cos(u); 20 + 1*sin(u) }
+}
+
+procedure draw_leaving_group_bond {} 
+{
+color 0 0 100
+ang3d_draw_parametric_surface u v
+{0; u <= 6.28; u + 0.3} 
+{30; v <= 40; v + 0.3} 
 { v; 20 + 1*cos(u); 20 + 1*sin(u) }
 }
 
@@ -96,6 +108,7 @@ ang3d_draw_parametric_curve t
 procedure draw_R {x y z}
 {
 color 200 200 200
+linethickness 0.16
 ang3d_draw_parametric_surface u v
 {0; u <= 6.28; u + 0.1}
 {-1.57; v <= 1.57; v + 0.06}
@@ -123,6 +136,8 @@ call draw_ligand_bond {x y z}
 procedure animation_at_t {t} {
 if_then_else {t <= 30} 
 {
+call draw_leaving_group_bond {}
+call draw_leaving_group {45}
 expression x {t/2 - 20}
 call draw_nucleophile {x}
 call draw_R {11.67 43.57 20}
@@ -134,6 +149,8 @@ call draw_nucleophile {-5}
 call draw_nucleophile_bond {}
 if_then_else {t <= 65}
 {
+call draw_leaving_group_bond {}
+call draw_leaving_group {45}
 expression x {0.555333 * t - 7.7666}
 call  draw_R {x 43.57 20}
 call  draw_R {x 8.215 40.41}
@@ -141,6 +158,8 @@ call  draw_R {x  8.215 -0.41}
 }
 
 {
+expression x {t/2 + 10}
+call draw_leaving_group {x}
 call  draw_R {28.33 43.57 20}
 call  draw_R {28.33 8.215 40.41}
 call  draw_R {28.33  8.215 -0.41}
@@ -153,13 +172,3 @@ point TIME 0 0 100 100
 getx x TIME
 call animation_at_t {x}
 animation_frames 21 100 
-
-
-% --------------
-% C-LG bond
-% --------------
-color 0 0 100
-ang3d_draw_parametric_surface u v
-{0; u <= 6.28; u + 0.3} 
-{30; v <= 40; v + 0.3} 
-{ v; 20 + 1*cos(u); 20 + 1*sin(u) }
