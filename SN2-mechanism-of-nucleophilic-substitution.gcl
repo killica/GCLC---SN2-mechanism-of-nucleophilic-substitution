@@ -36,7 +36,14 @@ ang3d_draw_parametric_surface u v
 
 color 0 0 0
 ang3d_point LG x 20 20
+if_then_else {x == 45} 
+{
 printat LG {LG}
+}
+{
+printat LG {LG}
+}
+
 }
 
 % --------------
@@ -52,7 +59,14 @@ ang3d_draw_parametric_surface u v
 { x+ 5*cos(v)*cos(u); 20 + 5*cos(v)*sin(u); 20 + 5*sin(v) }
 color 0 0 0
 ang3d_point Nu x 20 20
+if_then_else {x < -5} 
+{
+printat Nu {Nu:}
+}
+{
 printat Nu {Nu}
+}
+
 }
 
 procedure draw_nucleophile_bond {}
@@ -170,4 +184,4 @@ call  draw_R {28.33  8.215 -0.41}
 point TIME 0 0 100 100
 getx x TIME
 call animation_at_t {x}
-animation_frames 21 100 
+animation_frames 50 15
