@@ -5,7 +5,6 @@ ang3d_origin 100 50 pi 0.7
 ang3d_unit 2
 
 ang3d_axes_drawing_range -50 50 -50 50 -50 50
-ang3d_drawsystem_p 1 5 5 5 1 1
 
 % ----------------
 % Central carbon
