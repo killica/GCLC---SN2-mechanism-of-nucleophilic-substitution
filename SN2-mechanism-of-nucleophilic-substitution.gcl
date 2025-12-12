@@ -10,6 +10,8 @@ ang3d_axes_drawing_range -50 50 -50 50 -50 50
 % Central carbon
 % ----------------
 
+procedure draw_central_carbon {x} 
+{
 color 100 100 100
 ang3d_draw_parametric_surface u v 
 {0; u <= 6.28; u + 0.1} 
@@ -21,6 +23,8 @@ fontsize 40
 ang3d_point C 20 20 20
 printat C {C}
 fontsize 20
+}
+
 
 % --------------
 % Leaving group animation
@@ -41,7 +45,7 @@ if_then_else {x == 45}
 printat LG {LG}
 }
 {
-printat LG {:LG}
+printat LG {LG:}
 }
 
 }
@@ -61,7 +65,7 @@ color 0 0 0
 ang3d_point Nu x 20 20
 if_then_else {x < -5} 
 {
-printat Nu {Nu:}
+printat Nu {:Nu}
 }
 {
 printat Nu {Nu}
@@ -147,6 +151,12 @@ call draw_ligand_bond {x y z}
 }
 
 procedure animation_at_t {t} {
+expression pi {3.1416}
+expression alfa {pi/3 - t/200 * pi}  
+expression beta {-0.4 + t/100 * 0.5}   
+ang3d_origin 150 50 alfa beta
+call draw_central_carbon {0}
+
 if_then_else {t <= 30} 
 {
 call draw_leaving_group_bond {}
@@ -185,3 +195,4 @@ point TIME 0 0 100 100
 getx x TIME
 call animation_at_t {x}
 animation_frames 50 15
+
