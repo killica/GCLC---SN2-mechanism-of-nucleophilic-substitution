@@ -1,7 +1,7 @@
 number pi 3.14159
 dim 300 300
 ang3d_picture -500 -500 500 500
-ang3d_origin 100 50 pi 0.5
+ang3d_origin 100 50 2 0.7
 ang3d_unit 2
 
 ang3d_axes_drawing_range -50 50 -50 50 -50 50
@@ -37,63 +37,145 @@ fontsize 20
 ang3d_point LG 45 20 20
 printat LG {LG}
 
-
-% ---------------
-% First ligand
-% ---------------
-
-color 200 200 200
-ang3d_draw_parametric_surface u v
-{0; u <= 6.28; u + 0.1}
-{-1.57; v <= 1.57; v + 0.06}
-{ 11.67 + 5*cos(v)*cos(u); 43.57 + 5*cos(v)*sin(u); 20 + 5*sin(v) }
-
-color 0 0 0
-ang3d_point R1 11.67 43.57 20
-printat R1 {R1}
-
-% -------------
-% Second ligand
-% -------------
-
-color 200 200 200
-ang3d_draw_parametric_surface u v
-{0; u <= 6.28; u + 0.1}
-{-1.57; v <= 1.57; v + 0.06}
-{11.67 + 5*cos(v)*cos(u); 8.215 + 5*cos(v)*sin(u); 40.41 + 5*sin(v) }
-
-color 0 0 0
-ang3d_point R2 11.67 8.215 40.41
-printat R2 {R2}
-
-
 % --------------
-% Third ligand
+% Nucleophile animation
 % --------------
 
-color 200 200 200
-ang3d_draw_parametric_surface u v
-{0; u <= 6.28; u + 0.1}
-{-1.57; v <= 1.57; v + 0.06}
-{ 11.67 + 5*cos(v)*cos(u); 8.215 + 5*cos(v)*sin(u); -0.41 + 5*sin(v) }
-
-color 0 0 0
-ang3d_point R3 11.67 8.215 -0.41
-printat R3 {R3}
-
-% --------------
-% Nucleophile
-% --------------
-
+procedure draw_nucleophile {x} {
+linethickness 0.16
 color 228 208 10
 ang3d_draw_parametric_surface u v
 {0; u <= 6.28; u + 0.1}
 {-1.57; v <= 1.57; v + 0.06}
-{ -20 + 5*cos(v)*cos(u); 20 + 5*cos(v)*sin(u); 20 + 5*sin(v) }
+{ x+ 5*cos(v)*cos(u); 20 + 5*cos(v)*sin(u); 20 + 5*sin(v) }
+color 0 0 0
+ang3d_point Nu x 20 20
+printat Nu {Nu}
+}
+
+procedure draw_nucleophile_bond {}
+{
+color 218 165 32
+ang3d_draw_parametric_surface u v
+{0; u <= 6.28; u + 0.3} 
+{0; v <= 10; v + 0.3} 
+{ v; 20 + 1*cos(u); 20 + 1*sin(u) }
+}
+
+procedure draw_ligand_bond {x y z} 
+{
+number R_C 10 
+number R_L 5
+
+expression dx {20 - x}
+expression dy {20 - y}
+expression dz {20 - z}
+
+expression D {sqrt(dx*dx + dy*dy + dz*dz)}
+
+expression PLx {x + R_L * dx / D}
+expression PLy {y + R_L * dy / D}
+expression PLz {z + R_L * dz / D}
+
+expression PCx {20 - R_C * dx / D}
+expression PCy {20 - R_C * dy / D}
+expression PCz {20 - R_C * dz / D}
+
+linethickness 0.5
+color 0 0 100
+ang3d_draw_parametric_curve t
+{0; t <= 1; t + 0.01}
+{
+  PLx + t * (PCx - PLx);
+  PLy + t * (PCy - PLy);
+  PLz + t * (PCz - PLz)
+}
+
+}
+
+procedure draw_R1 {x}
+{
+color 200 200 200
+ang3d_draw_parametric_surface u v
+{0; u <= 6.28; u + 0.1}
+{-1.57; v <= 1.57; v + 0.06}
+{ x + 5*cos(v)*cos(u); 43.57 + 5*cos(v)*sin(u); 20 + 5*sin(v) }
 
 color 0 0 0
-ang3d_point Nu -20 20 20
-printat Nu {Nu}
+ang3d_point R1 x 43.57 20
+printat R1 {R1}
+
+call draw_ligand_bond {x 43.57 20}
+}
+
+
+procedure draw_R2 {x}
+{
+color 200 200 200
+ang3d_draw_parametric_surface u v
+{0; u <= 6.28; u + 0.1}
+{-1.57; v <= 1.57; v + 0.06}
+{x + 5*cos(v)*cos(u); 8.215 + 5*cos(v)*sin(u); 40.41 + 5*sin(v) }
+
+color 0 0 0
+ang3d_point R2 x 8.215 40.41
+printat R2 {R2}
+
+call draw_ligand_bond {x 8.215 40.41}
+}
+
+procedure draw_R3 {x}
+{
+color 200 200 200
+ang3d_draw_parametric_surface u v
+{0; u <= 6.28; u + 0.1}
+{-1.57; v <= 1.57; v + 0.06}
+{ x + 5*cos(v)*cos(u); 8.215 + 5*cos(v)*sin(u); -0.41 + 5*sin(v) }
+
+color 0 0 0
+ang3d_point R3 x 8.215 -0.41
+printat R3 {R3}
+
+call draw_ligand_bond {x 8.215 -0.41}
+}
+
+
+procedure animation_at_t {t} {
+if_then_else {t <= 30} 
+{
+expression x {t/2 - 20}
+call draw_nucleophile {x}
+call draw_R1 {11.67}
+call draw_R2 {11.67}
+call draw_R3 {11.67}
+}
+{
+call draw_nucleophile {-5}
+call draw_nucleophile_bond {}
+if_then_else {t <= 65}
+{
+expression x1 {0.555333 * t - 7.7666}
+call draw_R1 {x1}
+expression x2 {0.555333 * t - 7.7666}
+call draw_R2 {x2}
+expression x3 {0.555333 * t - 7.7666}
+call draw_R3 {x3}
+}
+
+{
+call draw_R1 {28.33}
+call draw_R2 {28.33}
+call draw_R3 {28.33}
+}
+ 
+}
+}
+
+point TIME 0 0 100 100
+getx x TIME
+call animation_at_t {x}
+animation_frames 21 100 
+
 
 % --------------
 % C-LG bond
@@ -103,27 +185,3 @@ ang3d_draw_parametric_surface u v
 {0; u <= 6.28; u + 0.3} 
 {30; v <= 40; v + 0.3} 
 { v; 20 + 1*cos(u); 20 + 1*sin(u) }
-
-% --------------
-% C-R1 bond
-% --------------
-linethickness 0.5
-ang3d_draw_parametric_curve t
-{0; t<=1; t+0.01}
-{ 16.667 + t*(13.3365 - 16.667); 29.429 + t*(38.857 - 29.429); 20 + t*(20 - 20) }
-
-% --------------
-% C-R2 bond
-% --------------
-
-ang3d_draw_parametric_curve t
-{0; t <= 1; t + 0.01}
-{ 16.667 + t*(13.3365 - 16.667); 15.285 + t*(10.573 - 15.285); 28.16 + t*(36.49 - 28.16) }
-
-% --------------
-% C-R3 bond
-% --------------
-
-ang3d_draw_parametric_curve t
-{0; t<=1; t+0.01}
-{ 16.667 + t*(13.3365 - 16.667); 15.285 + t*(10.573 - 15.285); 11.84 + t*(3.63 - 11.84) }
