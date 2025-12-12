@@ -41,7 +41,7 @@ if_then_else {x == 45}
 printat LG {LG}
 }
 {
-printat LG {LG}
+printat LG {:LG}
 }
 
 }
