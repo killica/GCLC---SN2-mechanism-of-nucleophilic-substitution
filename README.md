@@ -5,6 +5,5 @@ This project provides a 3D animated visualization of a nucleophilic substitution
 2. Intermediate pentavalent state of the central carbon atom and the substituents rearranging to form a tetrahedral geometry.
 3. Leaving group departure.
 
-
-https://github.com/user-attachments/assets/97ef7785-9ad6-4319-8baa-fea7b62be374
+https://github.com/user-attachments/assets/aecb40e3-f3dc-4bed-8062-0eb0edaeff7d
 
