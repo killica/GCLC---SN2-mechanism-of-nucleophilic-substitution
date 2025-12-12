@@ -127,7 +127,3 @@ ang3d_draw_parametric_curve t
 ang3d_draw_parametric_curve t
 {0; t<=1; t+0.01}
 { 16.667 + t*(13.3365 - 16.667); 15.285 + t*(10.573 - 15.285); 11.84 + t*(3.63 - 11.84) }
-
-
-
-
