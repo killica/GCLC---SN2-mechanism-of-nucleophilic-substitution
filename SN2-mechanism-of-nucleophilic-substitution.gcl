@@ -93,79 +93,57 @@ ang3d_draw_parametric_curve t
 
 }
 
-procedure draw_R1 {x}
+procedure draw_R {x y z}
 {
 color 200 200 200
 ang3d_draw_parametric_surface u v
 {0; u <= 6.28; u + 0.1}
 {-1.57; v <= 1.57; v + 0.06}
-{ x + 5*cos(v)*cos(u); 43.57 + 5*cos(v)*sin(u); 20 + 5*sin(v) }
+{ x + 5*cos(v)*cos(u); y + 5*cos(v)*sin(u); z + 5*sin(v) }
 
 color 0 0 0
-ang3d_point R1 x 43.57 20
-printat R1 {R1}
-
-call draw_ligand_bond {x 43.57 20}
-}
-
-
-procedure draw_R2 {x}
+ang3d_point R x y z
+if_then_else {z == 20}
 {
-color 200 200 200
-ang3d_draw_parametric_surface u v
-{0; u <= 6.28; u + 0.1}
-{-1.57; v <= 1.57; v + 0.06}
-{x + 5*cos(v)*cos(u); 8.215 + 5*cos(v)*sin(u); 40.41 + 5*sin(v) }
-
-color 0 0 0
-ang3d_point R2 x 8.215 40.41
-printat R2 {R2}
-
-call draw_ligand_bond {x 8.215 40.41}
+printat R {R1}
 }
-
-procedure draw_R3 {x}
 {
-color 200 200 200
-ang3d_draw_parametric_surface u v
-{0; u <= 6.28; u + 0.1}
-{-1.57; v <= 1.57; v + 0.06}
-{ x + 5*cos(v)*cos(u); 8.215 + 5*cos(v)*sin(u); -0.41 + 5*sin(v) }
-
-color 0 0 0
-ang3d_point R3 x 8.215 -0.41
-printat R3 {R3}
-
-call draw_ligand_bond {x 8.215 -0.41}
+if_then_else {z == 40.41}
+{
+printat R {R2}
+}
+{
+printat R {R3}
+}
 }
 
+call draw_ligand_bond {x y z}
+}
 
 procedure animation_at_t {t} {
 if_then_else {t <= 30} 
 {
 expression x {t/2 - 20}
 call draw_nucleophile {x}
-call draw_R1 {11.67}
-call draw_R2 {11.67}
-call draw_R3 {11.67}
+call draw_R {11.67 43.57 20}
+call draw_R {11.67 8.215 40.41}
+call draw_R {11.67 8.215 -0.41}
 }
 {
 call draw_nucleophile {-5}
 call draw_nucleophile_bond {}
 if_then_else {t <= 65}
 {
-expression x1 {0.555333 * t - 7.7666}
-call draw_R1 {x1}
-expression x2 {0.555333 * t - 7.7666}
-call draw_R2 {x2}
-expression x3 {0.555333 * t - 7.7666}
-call draw_R3 {x3}
+expression x {0.555333 * t - 7.7666}
+call  draw_R {x 43.57 20}
+call  draw_R {x 8.215 40.41}
+call  draw_R {x  8.215 -0.41}
 }
 
 {
-call draw_R1 {28.33}
-call draw_R2 {28.33}
-call draw_R3 {28.33}
+call  draw_R {28.33 43.57 20}
+call  draw_R {28.33 8.215 40.41}
+call  draw_R {28.33  8.215 -0.41}
 }
  
 }
