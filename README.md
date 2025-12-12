@@ -1,4 +1,4 @@
-# GCLC: SN2-mechanism-of-nucleophilic-substitution
+# GCLC: SN2 mechanism of nucleophilic substitution
 
 This project provides a 3D animated visualization of a nucleophilic substitution (SN2) reaction using GCLC. Atoms are represented as parametric spheres, and bonds are shown as curves connecting the closest points of the spheres. The animation illustrates the following:
 1. Nucleophile approaching the central carbon
